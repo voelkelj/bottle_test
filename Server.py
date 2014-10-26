@@ -31,16 +31,37 @@ def login():
 def do_login():
     username = request.forms.get('username')
     password = request.forms.get('password')
-    if check_login(username, password):
-        return "<p>Your login information was correct.</p>"
+    loginRequest = check_login(username, password)
+    if loginRequest[0]:
+    	print 'check_login is true'
+    	userJson = loginRequest[1]
+        return "<p>Your login information was correct.</p><p>Welcome "+ userJson["firstName"]+ " "+ userJson["lastName"] + "</p>"
     else:
         return "<p>Login failed.</p>"
 
 def check_login(usr, pwd):
-	global loginJson
-	username = loginJson["users"][0]["username"]
-	password = loginJson["users"][0]["password"]
-	return usr == username and pwd == password
-	#return usr == 'julian_voelkel@gmx.de' and pwd == '75b5bd19'
+	#global loginJson
+	global documentJson
+	loginJson = documentJson
+	usersJson = loginJson["users"]
+	for user in usersJson:
+		print "in for"
+		username = user["username"]
+		password = user["password"]
+		if usr == username and pwd == password:
+			return (True, user)
+	return (False, None)
 
+
+
+f = open('documentDB.txt')#open document DB
+global documentJson
+documentJson = json.loads(f.read())
+print documentJson
 run(host='localhost', port=8080)
+
+
+
+
+
+
