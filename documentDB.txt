@@ -1,1 +1,1 @@
-{"users" : [{"id" : "1", "firstName" : "Julian", "lastName" : "Voelkel", "username" : "julian_voelkel@gmx.de", "password" : "12345678"}]}
+{"users": [{"username": "julian_voelkel@gmx.de", "lastName": "Voelkel", "password": "12345678", "id": "1", "firstName": "Julian"}, {"username": "atif.alam@gmail.com", "lastName": "Alam", "password": "8765123", "id": "1", "firstName": "Atif"}]}

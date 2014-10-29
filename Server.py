@@ -17,6 +17,39 @@ def callback(id):
     assert isinstance(id, int)
     return template('<b> Hello number {{id}}', id=id)
 
+@route('/register')
+def register():
+    return '''
+        <form action="/register" method="post">
+            Name: <input name="new_name" type="text" />
+            First name: <input name="new_firstName" type="text" />
+            Choose username: <input name="new_username" type="text" />
+            Choose pwd: <input name="new_password" type="password">
+            <input value="Create account" type="submit">
+    '''
+@route('/register', method='POST')
+def create_account():
+    global documentJson
+    global s_db_name
+    new_name = request.forms.get('new_name')
+    new_firstName = request.forms.get('new_firstName')
+    new_username = request.forms.get('new_username')
+    new_password = request.forms.get('new_password')
+
+    js_users = documentJson['users']
+    js_users.append({'id' : str(len(js_users)), 'firstName': new_firstName, 'lastName' : new_name, 'username': new_username, 'password' : new_password})
+
+    f = open(s_db_name, 'w')
+    f.write(json.dumps(documentJson, f))
+    '''
+    js_users = documentJson['users']
+    js_users[len(js_users)]['id'] = str(len(js_users))
+    js_users[len(js_users)]['firstName'] = new_firstName
+    js_users[len(js_users)]['lastName'] = new_name
+    js_users[len(js_users)]['username'] = new_username
+    js_users[len(js_users)]['password'] = new_password
+    '''
+    return "<p>Created account with username "+ new_username+" :) </p>"
 
 @route('/login')
 def login():
@@ -54,9 +87,12 @@ def check_login(usr, pwd):
 
 
 
-f = open('documentDB.txt')#open document DB
+f = open('documentDB.txt', 'r+')#open document DB
 global documentJson
 documentJson = json.loads(f.read())
+global s_db_name
+s_db_name = 'documentDB.txt'
+
 print documentJson
 run(host='localhost', port=8080)
 
